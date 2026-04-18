@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="nl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA 1 Hub — Networking Academy Training</title>
+<meta name="description" content="Independent study tools for Cisco NetAcad ITNv7 (CCNA 1): exam practice quiz and hands-on Packet Tracer skills trainer.">
+<style>
+  :root{
+    --g:#1db37e;
+    --g2:#00875a;
+    --g-dark:#006644;
+    --g-light:#e8f8f2;
+    --g-lighter:#f4fcf8;
+    --bg:#f5f6f8;
+    --surface:#ffffff;
+    --surface2:#f3f4f6;
+    --border:#e2e4e8;
+    --border-strong:#cbd0d9;
+    --text:#1a1d23;
+    --text-muted:#6b7280;
+    --text-dim:#9ca3af;
+    --red:#de350b;
+    --yellow:#ff8b00;
+    --blue:#0052cc;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono:'Courier New',Courier,Consolas,'Lucida Console',monospace;
+    --radius:8px;
+    --radius-lg:12px;
+    --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md:0 2px 8px rgba(0,0,0,0.06);
+    --shadow-lg:0 4px 16px rgba(0,0,0,0.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  /* === TOPBAR === */
+  .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;min-height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm);gap:14px;flex-wrap:wrap}
+  .topbar-brand{display:flex;align-items:center;gap:10px;padding-right:14px;height:36px}
+  .cisco-bars{display:flex;gap:2px;align-items:flex-end;height:22px}
+  .cisco-bars span{display:block;width:3px;background:var(--g);border-radius:1px}
+  .cisco-bars span:nth-child(1){height:35%}
+  .cisco-bars span:nth-child(2){height:60%}
+  .cisco-bars span:nth-child(3){height:85%}
+  .cisco-bars span:nth-child(4){height:100%}
+  .cisco-bars span:nth-child(5){height:85%}
+  .cisco-bars span:nth-child(6){height:60%}
+  .cisco-bars span:nth-child(7){height:35%}
+  .brand-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+  .brand-sub{font-size:10px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;line-height:1.2;margin-top:2px}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .lang-switch{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px}
+  .lang-btn{background:transparent;border:none;padding:4px 10px;border-radius:14px;cursor:pointer;font-size:15px;line-height:1;opacity:0.55;transition:all 0.15s;font-family:inherit}
+  .lang-btn:hover{opacity:0.85;background:rgba(0,0,0,0.04)}
+  .lang-btn.active{background:var(--surface);opacity:1;box-shadow:var(--shadow-sm)}
+
+  /* === LAYOUT === */
+  main{max-width:960px;margin:0 auto;padding:28px 20px 60px}
+  @media(max-width:640px){main{padding:20px 14px 40px}.topbar{padding:10px 14px}}
+
+  /* === HERO === */
+  .hero{background:linear-gradient(135deg,var(--g) 0%,var(--g2) 100%);color:var(--surface);border-radius:var(--radius-lg);padding:36px 28px;margin-bottom:22px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);pointer-events:none}
+  .hero h1{font-size:1.9rem;margin-bottom:8px;font-weight:700;letter-spacing:-0.01em;position:relative}
+  .hero-sub{opacity:0.95;font-size:0.98rem;line-height:1.55;position:relative;max-width:640px}
+
+  /* === SECTION LABEL === */
+  .section-label{font-size:0.78rem;color:var(--text-muted);margin:28px 0 10px;font-weight:600;letter-spacing:0.02em;text-transform:uppercase}
+  .section-label:first-of-type{margin-top:8px}
+
+  /* === TOOL CARDS === */
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
+  @media(max-width:640px){.tools{grid-template-columns:1fr}}
+  .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;transition:all 0.18s;text-decoration:none;color:inherit;position:relative;overflow:hidden}
+  .tool-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--g);transform:scaleX(0);transform-origin:left;transition:transform 0.25s}
+  .tool-card:hover{border-color:var(--g);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .tool-card:hover::before{transform:scaleX(1)}
+  .tool-head{display:flex;align-items:center;gap:12px}
+  .tool-icon{width:42px;height:42px;border-radius:8px;background:var(--g-light);border:1px solid #b3e9d1;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;color:var(--g2);font-family:var(--mono);font-weight:700}
+  .tool-title{font-size:1.08rem;font-weight:700;color:var(--text);line-height:1.3}
+  .tool-type{font-size:0.72rem;color:var(--text-muted);letter-spacing:0.05em;text-transform:uppercase;margin-top:2px}
+  .tool-desc{font-size:0.88rem;color:var(--text-muted);line-height:1.55;flex:1}
+  .tool-bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
+  .tool-bullets li{font-size:0.82rem;color:var(--text-muted);padding-left:14px;position:relative;line-height:1.5}
+  .tool-bullets li::before{content:"·";color:var(--g);position:absolute;left:4px;font-weight:700;font-size:1.1rem;line-height:1}
+  .tool-cta{display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;font-weight:600;color:var(--g2);margin-top:4px}
+  .tool-cta::after{content:"→";transition:transform 0.18s}
+  .tool-card:hover .tool-cta::after{transform:translateX(3px)}
+
+  /* === STATS === */
+  .stats-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow-sm)}
+  .stats-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .stats-title{font-size:0.92rem;font-weight:700;color:var(--text)}
+  .stats-sub{font-size:0.76rem;color:var(--text-muted)}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:640px){.stats-grid{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;text-align:center}
+  .stat-val{font-size:1.4rem;font-weight:700;color:var(--g2);letter-spacing:-0.01em;line-height:1.2}
+  .stat-val.muted{color:var(--text-dim)}
+  .stat-val.warn{color:var(--yellow)}
+  .stat-lbl{font-size:0.7rem;color:var(--text-muted);margin-top:4px;letter-spacing:0.02em}
+  .stats-empty{font-size:0.85rem;color:var(--text-muted);text-align:center;padding:20px 10px;font-style:italic}
+  .stats-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .btn-ghost{display:inline-flex;align-items:center;gap:6px;font-size:0.78rem;font-weight:500;color:var(--text-muted);background:transparent;border:1px solid var(--border);border-radius:var(--radius);padding:6px 12px;cursor:pointer;font-family:inherit;transition:all 0.15s}
+  .btn-ghost:hover{border-color:var(--red);color:var(--red)}
+  .stats-last{font-size:0.78rem;color:var(--text-muted);margin-top:8px}
+
+  /* === RESOURCES === */
+  .resources{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:640px){.resources{grid-template-columns:1fr}}
+  .res-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;text-decoration:none;color:inherit;display:flex;align-items:flex-start;gap:12px;transition:all 0.15s;box-shadow:var(--shadow-sm)}
+  .res-card:hover{border-color:var(--g);transform:translateY(-1px);box-shadow:var(--shadow-md)}
+  .res-icon{width:32px;height:32px;border-radius:6px;background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);font-size:0.72rem;font-weight:700;color:var(--text-muted)}
+  .res-body{flex:1;min-width:0}
+  .res-title{font-size:0.88rem;font-weight:600;color:var(--text);line-height:1.3}
+  .res-desc{font-size:0.76rem;color:var(--text-muted);margin-top:2px;line-height:1.5}
+  .res-ext{font-size:0.7rem;color:var(--text-dim);margin-top:3px;font-family:var(--mono)}
+
+  /* === DISCLAIMER === */
+  .disclaimer{margin-top:28px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:var(--radius);padding:14px 18px;font-size:0.8rem;color:var(--text-muted);line-height:1.6}
+  .disclaimer strong{color:var(--text)}
+  .disclaimer a{color:var(--g2);text-decoration:none}
+  .disclaimer a:hover{text-decoration:underline}
+
+  footer{text-align:center;margin-top:28px;padding:16px 0;font-size:0.74rem;color:var(--text-dim)}
+  footer a{color:var(--text-muted);text-decoration:none}
+  footer a:hover{color:var(--g2)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="cisco-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div>
+      <div class="brand-title">Networking Academy</div>
+      <div class="brand-sub" data-i18n="brand_sub">CCNA 1 Study Hub</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button class="lang-btn" id="lang-nl" type="button" title="Nederlands">🇳🇱</button>
+      <button class="lang-btn" id="lang-en" type="button" title="English">🇬🇧</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1 data-i18n="hero_title">CCNA 1 Study Hub</h1>
+    <p class="hero-sub" data-i18n="hero_sub">Independent study tools for the Cisco NetAcad Introduction to Networks (ITNv7) curriculum. Practice exam questions, master IOS commands, and work through Packet Tracer skills challenges — all in the browser.</p>
+  </section>
+
+  <div class="section-label" data-i18n="label_tools">Training tools</div>
+  <div class="tools">
+
+    <a class="tool-card" href="quiz.html">
+      <div class="tool-head">
+        <div class="tool-icon">Q</div>
+        <div>
+          <div class="tool-title" data-i18n="tool_quiz_title">Final Exam Quiz</div>
+          <div class="tool-type" data-i18n="tool_quiz_type">Multiple choice · 143 questions</div>
+        </div>
+      </div>
+      <p class="tool-desc" data-i18n="tool_quiz_desc">Practice the CCNA 1 Final Exam with a randomized pool. Each round picks 60 unique questions from Modules 1–17.</p>
+      <ul class="tool-bullets">
+        <li data-i18n="tool_quiz_b1">Study mode with instant feedback</li>
+        <li data-i18n="tool_quiz_b2">Exam mode with 1:15:00 timer</li>
+        <li data-i18n="tool_quiz_b3">Retry only the questions you got wrong</li>
+      </ul>
+      <span class="tool-cta" data-i18n="tool_quiz_cta">Start quiz</span>
+    </a>
+
+    <a class="tool-card" href="trainer.html">
+      <div class="tool-head">
+        <div class="tool-icon">T</div>
+        <div>
+          <div class="tool-title" data-i18n="tool_trainer_title">Packet Tracer Trainer</div>
+          <div class="tool-type" data-i18n="tool_trainer_type">Hands-on · IOS CLI + subnetting</div>
+        </div>
+      </div>
+      <p class="tool-desc" data-i18n="tool_trainer_desc">Interactive trainer for the PTSA skills assessment. Practice the IOS CLI, fill in addressing tables, and run full exam simulations.</p>
+      <ul class="tool-bullets">
+        <li data-i18n="tool_trainer_b1">CLI scenarios with realistic prompts</li>
+        <li data-i18n="tool_trainer_b2">VLSM addressing tables</li>
+        <li data-i18n="tool_trainer_b3">Full PTSA exam with random variants</li>
+      </ul>
+      <span class="tool-cta" data-i18n="tool_trainer_cta">Open trainer</span>
+    </a>
+
+  </div>
+
+  <div class="section-label" data-i18n="label_progress">Your progress</div>
+  <div class="stats-wrap">
+    <div class="stats-head">
+      <div class="stats-title" data-i18n="stats_title">Session stats</div>
+      <div class="stats-sub" data-i18n="stats_sub">Stored locally in this browser</div>
+    </div>
+    <div id="stats-body"></div>
+  </div>
+
+  <div class="section-label" data-i18n="label_resources">Reference material</div>
+  <div class="resources">
+
+    <a class="res-card" href="CCNA1_Studiegids.md">
+      <div class="res-icon">MD</div>
+      <div class="res-body">
+        <div class="res-title" data-i18n="res_guide_title">CCNA 1 Study Guide</div>
+        <div class="res-desc" data-i18n="res_guide_desc">Condensed notes across all 17 modules, with exam pitfalls and a PT skills checklist.</div>
+        <div class="res-ext">CCNA1_Studiegids.md</div>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://www.netacad.com/courses/introduction-networks-v7" target="_blank" rel="noopener">
+      <div class="res-icon">↗</div>
+      <div class="res-body">
+        <div class="res-title" data-i18n="res_netacad_title">Cisco NetAcad — ITNv7</div>
+        <div class="res-desc" data-i18n="res_netacad_desc">The official Introduction to Networks v7.0 course on Cisco Networking Academy.</div>
+        <div class="res-ext">netacad.com</div>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://www.cisco.com/c/en/us/support/index.html" target="_blank" rel="noopener">
+      <div class="res-icon">↗</div>
+      <div class="res-body">
+        <div class="res-title" data-i18n="res_cisco_title">Cisco IOS Command Reference</div>
+        <div class="res-desc" data-i18n="res_cisco_desc">Official Cisco documentation for IOS commands — use for syntax verification.</div>
+        <div class="res-ext">cisco.com/support</div>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://www.netacad.com/courses/packet-tracer" target="_blank" rel="noopener">
+      <div class="res-icon">↗</div>
+      <div class="res-body">
+        <div class="res-title" data-i18n="res_pt_title">Cisco Packet Tracer</div>
+        <div class="res-desc" data-i18n="res_pt_desc">Free network simulation software from Cisco NetAcad for building and testing topologies.</div>
+        <div class="res-ext">netacad.com</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="disclaimer">
+    <strong data-i18n="disc_title">Disclaimer · Not affiliated with Cisco</strong><br>
+    <span data-i18n="disc_body">This is an independent study tool created by a student for personal practice. <strong>Cisco</strong>, <strong>Networking Academy</strong>, <strong>NetAcad</strong>, <strong>CCNA</strong>, <strong>Packet Tracer</strong>, and <strong>IOS</strong> are trademarks of Cisco Systems, Inc. All course materials and trademarks remain the property of their respective owners. Question content is based on publicly available exam material and used for educational purposes only. For the official curriculum, certification, and up-to-date material, visit netacad.com.</span>
+    <br><br>
+    <strong data-i18n="priv_title">Privacy</strong><br>
+    <span data-i18n="priv_body">No cookies, analytics, or tracking. No data leaves your device. Your progress and language preference are stored only in your browser's local storage. Use the "Reset all local data" link below to clear everything.</span>
+  </div>
+
+  <footer>
+    <span data-i18n="footer_text">Built as a CCNA 1 study companion ·</span>
+    <a href="#" id="reset-link" data-i18n="footer_reset">Reset all local data</a>
+  </footer>
+
+</main>
+
+<script>
+'use strict';
+
+// ============================================================
+// HUB STATS — shared with quiz.html and trainer.html
+// ============================================================
+const HubStats = {
+  KEY: 'ccna1_hub_stats',
+  get() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  },
+  clear() {
+    try {
+      localStorage.removeItem(this.KEY);
+      localStorage.removeItem('ccna1_wrongs');
+      localStorage.removeItem('ccna1_lang');
+    } catch (e) {}
+  }
+};
+
+// ============================================================
+// I18N
+// ============================================================
+const I18N = {
+  en: {
+    brand_sub: 'CCNA 1 Study Hub',
+    hero_title: 'CCNA 1 Study Hub',
+    hero_sub: 'Independent study tools for the Cisco NetAcad Introduction to Networks (ITNv7) curriculum. Practice exam questions, master IOS commands, and work through Packet Tracer skills challenges — all in the browser.',
+    label_tools: 'Training tools',
+    label_progress: 'Your progress',
+    label_resources: 'Reference material',
+    tool_quiz_title: 'Final Exam Quiz',
+    tool_quiz_type: 'Multiple choice · 143 questions',
+    tool_quiz_desc: 'Practice the CCNA 1 Final Exam with a randomized pool. Each round picks 60 unique questions from Modules 1–17.',
+    tool_quiz_b1: 'Study mode with instant feedback',
+    tool_quiz_b2: 'Exam mode with 1:15:00 timer',
+    tool_quiz_b3: 'Retry only the questions you got wrong',
+    tool_quiz_cta: 'Start quiz',
+    tool_trainer_title: 'Packet Tracer Trainer',
+    tool_trainer_type: 'Hands-on · IOS CLI + subnetting',
+    tool_trainer_desc: 'Interactive trainer for the PTSA skills assessment. Practice the IOS CLI, fill in addressing tables, and run full exam simulations.',
+    tool_trainer_b1: 'CLI scenarios with realistic prompts',
+    tool_trainer_b2: 'VLSM addressing tables',
+    tool_trainer_b3: 'Full PTSA exam with random variants',
+    tool_trainer_cta: 'Open trainer',
+    stats_title: 'Session stats',
+    stats_sub: 'Stored locally in this browser',
+    stats_empty: 'No activity yet. Start a quiz or open the trainer to build up your stats.',
+    stat_last_score: 'Last quiz score',
+    stat_quiz_count: 'Quizzes finished',
+    stat_cli_count: 'CLI scenarios done',
+    stat_wrongs: 'Wrongs to retry',
+    stat_addr: 'Address tables done',
+    stat_ptsa: 'PTSA exams passed',
+    stat_last_mode: 'Last mode',
+    stats_clear: 'Clear stats',
+    stats_clear_confirm: 'Clear all local progress (stats + saved wrongs + language preference)? This cannot be undone.',
+    stats_last_activity: 'Last activity',
+    res_guide_title: 'CCNA 1 Study Guide',
+    res_guide_desc: 'Condensed notes across all 17 modules, with exam pitfalls and a PT skills checklist.',
+    res_netacad_title: 'Cisco NetAcad — ITNv7',
+    res_netacad_desc: 'The official Introduction to Networks v7.0 course on Cisco Networking Academy.',
+    res_cisco_title: 'Cisco IOS Command Reference',
+    res_cisco_desc: 'Official Cisco documentation for IOS commands — use for syntax verification.',
+    res_pt_title: 'Cisco Packet Tracer',
+    res_pt_desc: 'Free network simulation software from Cisco NetAcad for building and testing topologies.',
+    disc_title: 'Disclaimer · Not affiliated with Cisco',
+    disc_body: 'This is an independent study tool created by a student for personal practice. <strong>Cisco</strong>, <strong>Networking Academy</strong>, <strong>NetAcad</strong>, <strong>CCNA</strong>, <strong>Packet Tracer</strong>, and <strong>IOS</strong> are trademarks of Cisco Systems, Inc. All course materials and trademarks remain the property of their respective owners. Question content is based on publicly available exam material and used for educational purposes only. For the official curriculum, certification, and up-to-date material, visit netacad.com.',
+    priv_title: 'Privacy',
+    priv_body: 'No cookies, analytics, or tracking. No data leaves your device. Your progress and language preference are stored only in your browser\'s local storage. Use the "Reset all local data" link below to clear everything.',
+    footer_text: 'Built as a CCNA 1 study companion ·',
+    footer_reset: 'Reset all local data',
+    mode_study: 'Study',
+    mode_exam: 'Exam',
+    mode_wrong: 'Retry wrongs',
+    time_now: 'just now',
+    time_mins: '{n} min ago',
+    time_hours: '{n}h ago',
+    time_days: '{n}d ago'
+  },
+  nl: {
+    brand_sub: 'CCNA 1 Studiehub',
+    hero_title: 'CCNA 1 Studiehub',
+    hero_sub: 'Onafhankelijke studietools voor het Cisco NetAcad Introduction to Networks (ITNv7) curriculum. Oefen examenvragen, leer IOS-commando\'s, en werk door Packet Tracer skills challenges — allemaal in de browser.',
+    label_tools: 'Oefentools',
+    label_progress: 'Jouw voortgang',
+    label_resources: 'Referentiemateriaal',
+    tool_quiz_title: 'Final Exam Quiz',
+    tool_quiz_type: 'Meerkeuze · 143 vragen',
+    tool_quiz_desc: 'Oefen het CCNA 1 Final Exam met een willekeurige pool. Elke ronde krijg je 60 unieke vragen uit Modules 1–17.',
+    tool_quiz_b1: 'Studie-modus met directe feedback',
+    tool_quiz_b2: 'Examen-modus met 1:15:00 timer',
+    tool_quiz_b3: 'Herhaal alleen vragen die je fout had',
+    tool_quiz_cta: 'Start quiz',
+    tool_trainer_title: 'Packet Tracer Trainer',
+    tool_trainer_type: 'Praktijk · IOS CLI + subnetting',
+    tool_trainer_desc: 'Interactieve trainer voor de PTSA skills assessment. Oefen de IOS CLI, vul adresseringstabellen in, en doe volledige examen-simulaties.',
+    tool_trainer_b1: 'CLI-scenarios met realistische prompts',
+    tool_trainer_b2: 'VLSM adresseringstabellen',
+    tool_trainer_b3: 'Volledig PTSA examen met willekeurige varianten',
+    tool_trainer_cta: 'Open trainer',
+    stats_title: 'Sessie-statistieken',
+    stats_sub: 'Lokaal opgeslagen in deze browser',
+    stats_empty: 'Nog geen activiteit. Start een quiz of open de trainer om je voortgang op te bouwen.',
+    stat_last_score: 'Laatste quiz-score',
+    stat_quiz_count: 'Quizzes afgerond',
+    stat_cli_count: 'CLI-scenarios gedaan',
+    stat_wrongs: 'Fouten om te herhalen',
+    stat_addr: 'Adrestabellen ingevuld',
+    stat_ptsa: 'PTSA examens gehaald',
+    stat_last_mode: 'Laatste modus',
+    stats_clear: 'Stats wissen',
+    stats_clear_confirm: 'Alle lokale voortgang wissen (stats + opgeslagen fouten + taalvoorkeur)? Dit kan niet ongedaan worden gemaakt.',
+    stats_last_activity: 'Laatste activiteit',
+    res_guide_title: 'CCNA 1 Studiegids',
+    res_guide_desc: 'Compacte samenvatting van alle 17 modules, met examenvalkuilen en een PT skills checklist.',
+    res_netacad_title: 'Cisco NetAcad — ITNv7',
+    res_netacad_desc: 'De officiële Introduction to Networks v7.0 cursus op Cisco Networking Academy.',
+    res_cisco_title: 'Cisco IOS Command Reference',
+    res_cisco_desc: 'Officiële Cisco-documentatie voor IOS-commando\'s — gebruik voor syntax-verificatie.',
+    res_pt_title: 'Cisco Packet Tracer',
+    res_pt_desc: 'Gratis netwerk-simulatiesoftware van Cisco NetAcad voor het bouwen en testen van topologieën.',
+    disc_title: 'Disclaimer · Niet verbonden met Cisco',
+    disc_body: 'Dit is een onafhankelijke studietool gemaakt door een student voor persoonlijke oefening. <strong>Cisco</strong>, <strong>Networking Academy</strong>, <strong>NetAcad</strong>, <strong>CCNA</strong>, <strong>Packet Tracer</strong> en <strong>IOS</strong> zijn handelsmerken van Cisco Systems, Inc. Alle cursusmaterialen en handelsmerken blijven eigendom van de respectievelijke eigenaren. De vragen zijn gebaseerd op publiek beschikbaar examenmateriaal en uitsluitend voor educatief gebruik. Voor het officiële curriculum, certificering en actueel materiaal, bezoek netacad.com.',
+    priv_title: 'Privacy',
+    priv_body: 'Geen cookies, analytics of tracking. Er verlaat geen data je apparaat. Je voortgang en taalvoorkeur worden alleen in de local storage van je browser bewaard. Gebruik de "Wis alle lokale data" link hieronder om alles te verwijderen.',
+    footer_text: 'Gebouwd als CCNA 1 studie-companion ·',
+    footer_reset: 'Wis alle lokale data',
+    mode_study: 'Studie',
+    mode_exam: 'Examen',
+    mode_wrong: 'Fout-herhaling',
+    time_now: 'zojuist',
+    time_mins: '{n} min geleden',
+    time_hours: '{n}u geleden',
+    time_days: '{n}d geleden'
+  }
+};
+
+let currentLang = 'nl';
+
+function t(key, subs) {
+  let s = I18N[currentLang][key] || I18N.en[key] || key;
+  if (subs) for (const k in subs) s = s.replace('{' + k + '}', subs[k]);
+  return s;
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if (el.tagName === 'INPUT') el.placeholder = val;
+    else if (key === 'disc_body' || key === 'priv_body') el.innerHTML = val; // allow strong tags + entities
+    else el.textContent = val;
+  });
+  document.getElementById('lang-nl').classList.toggle('active', currentLang === 'nl');
+  document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+  renderStats(); // re-render with new labels
+}
+
+function setLanguage(lang) {
+  if (lang !== 'nl' && lang !== 'en') return;
+  currentLang = lang;
+  try { localStorage.setItem('ccna1_lang', lang); } catch (e) {}
+  applyLanguage();
+}
+
+function detectLanguage() {
+  try {
+    const saved = localStorage.getItem('ccna1_lang');
+    if (saved === 'nl' || saved === 'en') return saved;
+  } catch (e) {}
+  const nav = (navigator.language || 'en').toLowerCase();
+  return nav.startsWith('nl') ? 'nl' : 'en';
+}
+
+// ============================================================
+// STATS RENDERING
+// ============================================================
+function timeAgo(ts) {
+  if (!ts) return '—';
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return t('time_now');
+  if (mins < 60) return t('time_mins', { n: mins });
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return t('time_hours', { n: hours });
+  const days = Math.floor(hours / 24);
+  return t('time_days', { n: days });
+}
+
+function modeLabel(mode) {
+  if (mode === 'study') return t('mode_study');
+  if (mode === 'exam') return t('mode_exam');
+  if (mode === 'wrong') return t('mode_wrong');
+  return '—';
+}
+
+function renderStats() {
+  const s = HubStats.get();
+  const body = document.getElementById('stats-body');
+  const hasAny = s.lastActivity ||
+    s.quizzesCompleted || s.cliScenariosCompleted ||
+    s.addrTablesCompleted || s.ptsaCompleted ||
+    (s.wrongsSaved && s.wrongsSaved > 0);
+
+  if (!hasAny) {
+    body.innerHTML = '<div class="stats-empty">' + t('stats_empty') + '</div>';
+    return;
+  }
+
+  const lastScoreDisplay = (s.lastQuizScore != null && s.lastQuizTotal != null)
+    ? `${s.lastQuizScore}/${s.lastQuizTotal}`
+    : '—';
+  const lastPct = s.lastQuizPct != null ? s.lastQuizPct : null;
+  const scoreClass = lastPct == null ? 'muted' : (lastPct >= 70 ? '' : 'warn');
+
+  const cards = [
+    { val: lastScoreDisplay, lbl: t('stat_last_score'), cls: scoreClass, sub: lastPct != null ? `${lastPct}%` : null },
+    { val: s.quizzesCompleted || 0, lbl: t('stat_quiz_count'), cls: (s.quizzesCompleted ? '' : 'muted') },
+    { val: s.cliScenariosCompleted || 0, lbl: t('stat_cli_count'), cls: (s.cliScenariosCompleted ? '' : 'muted') },
+    { val: s.wrongsSaved || 0, lbl: t('stat_wrongs'), cls: (s.wrongsSaved ? 'warn' : 'muted') }
+  ];
+
+  let html = '<div class="stats-grid">';
+  for (const c of cards) {
+    const sub = c.sub ? `<div class="stat-lbl">${c.sub}</div>` : '';
+    html += `<div class="stat"><div class="stat-val ${c.cls}">${c.val}</div><div class="stat-lbl">${c.lbl}</div>${sub}</div>`;
+  }
+  html += '</div>';
+
+  // Secondary row: last activity + mode + clear button
+  const lastActText = s.lastActivity
+    ? `${t('stats_last_activity')}: ${timeAgo(s.lastActivity)}`
+    : '';
+  const lastModeText = s.lastQuizMode
+    ? ` · ${t('stat_last_mode')}: ${modeLabel(s.lastQuizMode)}`
+    : '';
+  if (lastActText) {
+    html += `<div class="stats-last">${lastActText}${lastModeText}</div>`;
+  }
+
+  html += '<div class="stats-actions">';
+  html += `<button class="btn-ghost" id="clear-stats-btn" type="button">${t('stats_clear')}</button>`;
+  html += '</div>';
+
+  body.innerHTML = html;
+
+  const clearBtn = document.getElementById('clear-stats-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (confirm(t('stats_clear_confirm'))) {
+        HubStats.clear();
+        renderStats();
+      }
+    });
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  currentLang = detectLanguage();
+  applyLanguage();
+
+  document.getElementById('lang-nl').addEventListener('click', () => setLanguage('nl'));
+  document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+
+  document.getElementById('reset-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (confirm(t('stats_clear_confirm'))) {
+      HubStats.clear();
+      renderStats();
+    }
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>

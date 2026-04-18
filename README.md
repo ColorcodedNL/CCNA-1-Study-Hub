@@ -1,2 +1,66 @@
-# CCNA-1-Study-Hub
-Browser-based study hub for Cisco NetAcad CCNA 1 (ITNv7). Randomized exam quiz with 143-question pool, IOS CLI trainer, VLSM addressing practice, and PTSA skills assessment simulator.
+# CCNA 1 Study Hub
+
+Independent study tools for the Cisco NetAcad **Introduction to Networks v7.0** (ITNv7 / CCNA 1) curriculum. Everything runs in the browser — no server, no build step, no dependencies.
+
+## What's inside
+
+| File | Tool | What it does |
+|------|------|--------------|
+| `index.html` | Hub | Landing page with tool overview, progress stats, and resources |
+| `quiz.html`  | Final Exam Quiz | 143-question pool, randomized 60 per round, study/exam/retry modes, 1:15:00 timer |
+| `trainer.html` | Packet Tracer Trainer | IOS CLI scenarios, VLSM addressing tables, and a full PTSA exam simulator |
+| `CCNA1_Studiegids.md` | Study guide | Condensed notes for all 17 modules with exam pitfalls |
+
+The three HTML files share a consistent NetAcad-green design and a common `localStorage` key (`ccna1_hub_stats`) so the hub can show your progress across tools.
+
+## Running it
+
+**Locally:** open `index.html` in any modern browser.
+
+**GitHub Pages:** push the repo, enable Pages on the `main` branch at `/ (root)`, and the hub is live at
+`https://<username>.github.io/<repo>/`
+
+## Features
+
+### Quiz (`quiz.html`)
+
+- Pool of 143 unique questions combining Practice Final + Final Exam content
+- Each round randomly picks 60 questions with shuffled answer options
+- Three modes:
+  - **Study** — instant feedback with explanation after each answer
+  - **Exam** — 1:15:00 timer, no feedback until the end, 70% pass threshold (42/60)
+  - **Retry wrongs** — only the questions you got wrong previously
+- Questions stay in English (to match the real exam), UI toggles NL/EN
+- Flag questions for review, navigate with the chip bar, pause the timer
+
+### Trainer (`trainer.html`)
+
+- **CLI tab** — scenario-based IOS command practice with a working terminal emulator (prompts, tab-complete, context-sensitive help)
+- **Adrestabel tab** — fill-in VLSM addressing tables with inline validation
+- **Examen tab** — full PTSA simulation with randomized IP variants, three phases (address table → router config → switch config)
+
+### Hub (`index.html`)
+
+- Summary of your last quiz score, quizzes completed, CLI scenarios done, and pending wrongs
+- Links to both tools and external resources (NetAcad, Cisco IOS docs, Packet Tracer)
+- Option to clear local data
+
+## Privacy
+
+No cookies, no analytics, no tracking, no third-party requests. The entire hub runs client-side with system fonts only — nothing is loaded from external CDNs or font services. Progress data and language preference are stored exclusively in the browser's `localStorage` under three keys:
+
+- `ccna1_hub_stats` — session stats (scores, counters, timestamps)
+- `ccna1_wrongs` — questions you got wrong, for the retry mode
+- `ccna1_lang` — your chosen UI language
+
+No data leaves the device. The "Reset all local data" link on the hub clears everything.
+
+## Disclaimer
+
+This is an independent study project created by a student for personal practice. **Cisco**, **Networking Academy**, **NetAcad**, **CCNA**, **Packet Tracer**, and **IOS** are trademarks of Cisco Systems, Inc. All course materials and trademarks remain the property of their respective owners. Question content is based on publicly available exam material and used for educational purposes only.
+
+For the official curriculum, certification, and up-to-date material: [netacad.com](https://www.netacad.com).
+
+## License
+
+Code in this repository is released under the MIT License. Cisco-owned content (trademarks, curriculum references) is not covered by this license and remains the property of Cisco Systems, Inc.
