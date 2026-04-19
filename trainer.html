@@ -2097,7 +2097,7 @@ const I18N = {
     // Exam phase 2
     step2_title: "Stap 2 — Router CLI",
     step2_hostname: "Hostname:", step2_enable: "Enable secret:", step2_domain: "Domain:",
-    step2_username: "Username:", step2_secret: "Secret:",
+    step2_username: "Username:", step2_secret: "User secret:", step2_conpw: "Console password:",
     step2_ipv6_note: "IPv6 en link-local: zie adrestabel",
     // Exam phase 3
     step3_title: "Stap 3 — Switch CLI",
@@ -2181,7 +2181,7 @@ const I18N = {
     step1_hint: "Fill all fields → click <em>Check</em>. At 100% the router CLI unlocks.",
     step2_title: "Step 2 — Router CLI",
     step2_hostname: "Hostname:", step2_enable: "Enable secret:", step2_domain: "Domain:",
-    step2_username: "Username:", step2_secret: "Secret:",
+    step2_username: "Username:", step2_secret: "User secret:", step2_conpw: "Console password:",
     step2_ipv6_note: "IPv6 and link-local: see address table",
     step3_title: "Step 3 — Switch CLI",
     step3_hostname: "Hostname:", step3_svi: "VLAN 1 IP:", step3_gw: "Default gateway:",
@@ -2344,6 +2344,7 @@ function examGenerateVariant() {
     if(swIp===rG01) swIp=swRole==="second"?l2sl:l2second;
 
     const pw  = rnd(["CISCO12345","Cisco@2024","NetAdmin1!","Secure#123"]);
+    const conPw = rnd(["C@nsPassw!","ConsolePw1","Line_Con_99","AccessCon!"]);
     const sec = rnd(["Cisco_CCNA7","Admin_Pass1!","User@Secret1"]);
     const dom = rnd(["netacad.com","cisco.com","ccna.local","training.local"]);
     const [i6a,i6b] = rnd([["a","b"],["a","c"],["b","c"],["10","11"]]);
@@ -2351,7 +2352,7 @@ function examGenerateVariant() {
     return {
       base, rName:rnd(["Building-1","HQ-Router","Branch-1","Campus-1"]),
       sName:rnd(["Floor2-SW","Admin-Switch","Mgmt-Switch","Second-Floor"]),
-      domain:dom, username:"netadmin", userSecret:sec, enableSecret:pw, consolePw:pw,
+      domain:dom, username:"netadmin", userSecret:sec, enableSecret:pw, consolePw:conPw,
       lan1Hosts:l1h, lan1Prefix:l1p, lan1Mask:l1mask, lan1Block:l1b, lan1Nr:l1nr,
       lan1Network:ip(l1start),
       rG00, rG00Mask:l1mask, rG00Role:r1role,
@@ -2524,6 +2525,7 @@ function examUpdateInstructions(){
       <div class="req-item">${L.step2_domain} <strong>${v.domain}</strong></div>
       <div class="req-item">${L.step2_username} <strong>${v.username}</strong></div>
       <div class="req-item">${L.step2_secret} <strong>${v.userSecret}</strong></div>
+      <div class="req-item">${L.step2_conpw} <strong>${v.consolePw}</strong></div>
       <hr style="margin:8px 0;border:none;border-top:1px solid var(--border)">
       <table class="ex-addr-mini">
         <tr><th colspan="2">G0/0 (LAN 1)</th></tr>
@@ -2983,12 +2985,64 @@ function examCLIReset(phase){
 }
 
 function examCLIDoTab(phase){
-  // Simple tab completion — show next expected command
+  // IOS-style tab-completion. Behavior:
+  //  - Prefix-matches every typed token against the candidate cmd
+  //  - Expands ALL typed tokens to their full form (not just the last one)
+  //  - Only completes when the current token expands to a real IOS keyword,
+  //    never when it's a parameter value (password, hostname, IP, description)
   const inp=document.getElementById(`ex-input-${phase}`);
-  const val=inp.value.trim();
+  const val=inp.value;
+  if(!val.length || /\s$/.test(val)) return;
   const {steps,done,mode}=examGetState(phase);
-  const match=steps.find(s=>!done.has(s.id)&&s.mode===mode&&s.cmd.startsWith(val)&&val.length>0);
-  if(match) inp.value=match.cmd;
+
+  const tokens = val.split(/\s+/);
+  const curIdx = tokens.length - 1;
+
+  // Candidates: every typed token is a prefix of the corresponding cmd token
+  const candidates = steps.filter(s => {
+    if(done.has(s.id)) return false;
+    if(s.mode !== mode) return false;
+    const parts = s.cmd.split(/\s+/);
+    if(parts.length <= curIdx) return false;
+    for(let i=0;i<=curIdx;i++){
+      if(!parts[i].toLowerCase().startsWith(tokens[i].toLowerCase())) return false;
+    }
+    return true;
+  });
+  if(candidates.length === 0) return;
+
+  // All candidates must agree on every typed token's full form
+  const fullTokens = [];
+  for(let i=0;i<=curIdx;i++){
+    const vals = new Set(candidates.map(s => s.cmd.split(/\s+/)[i]));
+    if(vals.size !== 1) return;  // ambiguous somewhere in the middle
+    fullTokens.push([...vals][0]);
+  }
+
+  // The current token must be a real IOS keyword. Parameter values are things
+  // the user defines (hostnames, passwords, IPs, descriptions). IOS never
+  // auto-fills those. Heuristic: real keywords are known IOS command words,
+  // present in this whitelist. Everything else is treated as user-supplied.
+  const IOS_KEYWORDS = new Set([
+    'enable','disable','exit','end','login','local','configure','terminal',
+    'hostname','secret','password','service','password-encryption','security',
+    'passwords','min-length','banner','motd','line','console','vty','aux',
+    'no','ip','ipv6','domain-lookup','domain-name','username','transport',
+    'input','ssh','all','telnet','none','crypto','key','generate','rsa',
+    'interface','description','address','link-local','shutdown','copy',
+    'running-config','startup-config','show','running','startup','vlan',
+    'switchport','mode','access','trunk','default-gateway','clock','rate',
+    'bandwidth','duplex','speed','auto','full','half'
+  ]);
+  const currentCompletion = fullTokens[curIdx];
+  // Accept IOS keyword, or interface shorthand (g0/0, fa0/1), or pure digits
+  const isKeyword =
+    IOS_KEYWORDS.has(currentCompletion.toLowerCase()) ||
+    /^[gf]?(igabitethernet|astethernet)?\d+\/\d+$/i.test(currentCompletion) ||
+    /^\d+$/.test(currentCompletion);
+  if(!isKeyword) return;
+
+  inp.value = fullTokens.join(' ') + ' ';
 }
 
 function examCLITabComplete(e,phase){}  // handled in keydown
