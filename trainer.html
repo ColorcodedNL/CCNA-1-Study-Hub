@@ -2882,8 +2882,12 @@ function examCLIProcess(val, phase){
     // Check requirements
     const missingReq=matched.req.filter(r=>!done.has(r));
     if(missingReq.length>0){
+      const missingLabels = missingReq.map(r => {
+        const dep = steps.find(s=>s.id===r);
+        return dep ? dep.cmd.split(' ').slice(0,3).join(' ') : r;
+      }).join(', ');
       const el=document.createElement('div'); el.className='line-err';
-      el.textContent=`% Command not allowed here. Missing prerequisite.`; term.appendChild(el);
+      el.textContent=`% Missing prerequisite: ${missingLabels}`; term.appendChild(el);
     } else {
       done.add(matched.id);
       if(matched.set) examSetMode(phase,matched.set);
@@ -2909,8 +2913,30 @@ function examCLIProcess(val, phase){
     // Already done
     const al=document.createElement('div'); al.className='line-sys'; al.textContent='(Already configured)'; term.appendChild(al);
   } else {
-    const el=document.createElement('div'); el.className='line-err';
-    el.textContent=`% Invalid input detected at '^' marker.`; term.appendChild(el);
+    // Check if the command matches a step in a different mode (wrong mode hint)
+    const wrongMode = steps.find(s => !done.has(s.id) && s.m.test(val) && s.mode !== mode);
+    if(wrongMode){
+      const el=document.createElement('div'); el.className='line-err';
+      el.textContent=`% Command valid but not in this mode. Expected mode: ${wrongMode.mode}`;
+      term.appendChild(el);
+    } else {
+      // Unrecognized or not-required: show IOS-style ^ marker pointing to first token
+      // Find offset of first non-space char
+      const offset = val.search(/\S/);
+      const firstTokenEnd = val.indexOf(' ', offset);
+      const pointerPos = firstTokenEnd > 0 ? firstTokenEnd : val.length;
+      const promptLen = examCLIPrompt(mode, steps, done, name, phase).length;
+      const marker=document.createElement('div'); marker.className='line-err';
+      marker.style.fontFamily='var(--mono)'; marker.style.whiteSpace='pre';
+      marker.textContent = ' '.repeat(promptLen + pointerPos) + '^';
+      term.appendChild(marker);
+      const el=document.createElement('div'); el.className='line-err';
+      el.textContent=`% Invalid input detected at '^' marker.`; term.appendChild(el);
+      const hint=document.createElement('div'); hint.className='line-sys';
+      hint.style.fontSize='10px';
+      hint.textContent=`(Not required for this scenario — check the sidebar for the expected commands)`;
+      term.appendChild(hint);
+    }
   }
 
   examCLIUpdatePrompt(phase,steps,done,name);
