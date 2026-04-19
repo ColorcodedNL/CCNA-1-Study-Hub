@@ -264,6 +264,11 @@ tbody td { padding: 4px 6px; vertical-align: middle; }
 .ex-network-banner { display:flex; align-items:center; gap:8px; background:#eff6ff; border:1px solid #bfdbfe; border-left:3px solid #3b82f6; border-radius:5px; padding:8px 12px; margin-bottom:12px; font-size:12px; }
 .ex-topo-wrap { background:#fff; border:1px solid var(--border); border-radius:6px; padding:8px; margin-bottom:12px; }
 .ex-topo-wrap svg { width:100%; height:auto; }
+.ex-addr-mini { border-collapse:collapse; width:100%; font-size:11px; margin-top:4px; }
+.ex-addr-mini th { background:var(--surface2); color:var(--text-muted); font-weight:600; font-size:9px; text-transform:uppercase; letter-spacing:0.05em; padding:4px 6px; border:1px solid var(--border); text-align:left; }
+.ex-addr-mini td { padding:3px 6px; border:1px solid var(--border); vertical-align:middle; }
+.ex-addr-mini td:first-child { font-size:10px; color:var(--text-muted); white-space:nowrap; width:38%; }
+.ex-addr-mini td code { font-family:var(--mono); font-size:10px; color:var(--text); background:none; padding:0; }
 .ex-addr-table { border-collapse:collapse; width:100%; font-size:11px; margin-bottom:12px; }
 .ex-addr-table th { background:#f9fafb; color:var(--text-muted); font-weight:600; font-size:9px; text-transform:uppercase; letter-spacing:0.06em; padding:6px 8px; border:1px solid var(--border); text-align:left; }
 .ex-addr-table td { padding:3px 6px; border:1px solid var(--border); vertical-align:middle; }
@@ -2520,17 +2525,31 @@ function examUpdateInstructions(){
       <div class="req-item">${L.step2_username} <strong>${v.username}</strong></div>
       <div class="req-item">${L.step2_secret} <strong>${v.userSecret}</strong></div>
       <hr style="margin:8px 0;border:none;border-top:1px solid var(--border)">
-      <div class="req-item">G0/0: <code>${v.rG00}/${v.lan1Prefix}</code></div>
-      <div class="req-item">G0/1: <code>${v.rG01}/${v.lan2Prefix}</code></div>
-      <div class="req-item" style="font-size:10px;color:var(--text-muted)">${L.step2_ipv6_note}</div>`;
+      <table class="ex-addr-mini">
+        <tr><th colspan="2">G0/0 (LAN 1)</th></tr>
+        <tr><td>IPv4</td><td><code>${v.rG00}/${v.lan1Prefix}</code></td></tr>
+        <tr><td>Mask</td><td><code>${v.rG00Mask}</code></td></tr>
+        <tr><td>IPv6</td><td><code>${v.ipv6A}</code></td></tr>
+        <tr><td>Link-local</td><td><code>${v.linkLocal}</code></td></tr>
+        <tr><th colspan="2">G0/1 (LAN 2)</th></tr>
+        <tr><td>IPv4</td><td><code>${v.rG01}/${v.lan2Prefix}</code></td></tr>
+        <tr><td>Mask</td><td><code>${v.rG01Mask}</code></td></tr>
+        <tr><td>IPv6</td><td><code>${v.ipv6B}</code></td></tr>
+        <tr><td>Link-local</td><td><code>${v.linkLocal}</code></td></tr>
+      </table>`;
   } else {
     el.innerHTML=`
       <h3>${L.step3_title}</h3>
       <div class="req-item">${L.step3_hostname} <strong>${v.sName}</strong></div>
-      <div class="req-item">${L.step3_svi} <code>${v.swIp}/${v.lan2Prefix}</code></div>
-      <div class="req-item">${L.step3_gw} <code>${v.swGw}</code></div>
       <div class="req-item">${L.step3_vtypw} <strong>${v.consolePw}</strong></div>
-      <div class="req-item" style="color:#f59e0b;font-weight:500">${L.step3_telnet}</div>`;
+      <div class="req-item" style="color:#f59e0b;font-weight:500">${L.step3_telnet}</div>
+      <hr style="margin:8px 0;border:none;border-top:1px solid var(--border)">
+      <table class="ex-addr-mini">
+        <tr><th colspan="2">${v.sName} — VLAN 1 (SVI)</th></tr>
+        <tr><td>IPv4</td><td><code>${v.swIp}/${v.lan2Prefix}</code></td></tr>
+        <tr><td>Mask</td><td><code>${v.swMask}</code></td></tr>
+        <tr><td>Gateway</td><td><code>${v.swGw}</code></td></tr>
+      </table>`;
   }
 }
 
