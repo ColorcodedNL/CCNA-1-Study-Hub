@@ -202,7 +202,7 @@
 
   <div class="section-label" data-i18n="label_resources">Reference material</div>
   <div class="resources">
-    
+
     <a class="res-card" href="https://www.netacad.com/courses/ccna-introduction-networks?courseLang=en-US" target="_blank" rel="noopener">
       <div class="res-icon">↗</div>
       <div class="res-body">
@@ -211,7 +211,7 @@
         <div class="res-ext">netacad.com</div>
       </div>
     </a>
-    
+
     <a class="res-card" href="https://www.netacad.com/courses/packet-tracer" target="_blank" rel="noopener">
       <div class="res-icon">↗</div>
       <div class="res-body">
@@ -293,18 +293,12 @@ const I18N = {
     stat_quiz_count: 'Quizzes finished',
     stat_cli_count: 'CLI scenarios done',
     stat_wrongs: 'Wrongs to retry',
-    stat_addr: 'Address tables done',
-    stat_ptsa: 'PTSA exams passed',
     stat_last_mode: 'Last mode',
     stats_clear: 'Clear stats',
     stats_clear_confirm: 'Clear all local progress (stats + saved wrongs + language preference)? This cannot be undone.',
     stats_last_activity: 'Last activity',
-    res_guide_title: 'CCNA 1 Study Guide',
-    res_guide_desc: 'Condensed notes across all 17 modules, with exam pitfalls and a PT skills checklist.',
     res_netacad_title: 'Cisco NetAcad — ITNv7',
     res_netacad_desc: 'The official Introduction to Networks v7.0 course on Cisco Networking Academy.',
-    res_cisco_title: 'Cisco IOS Command Reference',
-    res_cisco_desc: 'Official Cisco documentation for IOS commands — use for syntax verification.',
     res_pt_title: 'Cisco Packet Tracer',
     res_pt_desc: 'Free network simulation software from Cisco NetAcad for building and testing topologies.',
     disc_title: 'Disclaimer · Not affiliated with Cisco',
@@ -349,18 +343,12 @@ const I18N = {
     stat_quiz_count: 'Quizzes afgerond',
     stat_cli_count: 'CLI-scenarios gedaan',
     stat_wrongs: 'Fouten om te herhalen',
-    stat_addr: 'Adrestabellen ingevuld',
-    stat_ptsa: 'PTSA examens gehaald',
     stat_last_mode: 'Laatste modus',
     stats_clear: 'Stats wissen',
     stats_clear_confirm: 'Alle lokale voortgang wissen (stats + opgeslagen fouten + taalvoorkeur)? Dit kan niet ongedaan worden gemaakt.',
     stats_last_activity: 'Laatste activiteit',
-    res_guide_title: 'CCNA 1 Studiegids',
-    res_guide_desc: 'Compacte samenvatting van alle 17 modules, met examenvalkuilen en een PT skills checklist.',
     res_netacad_title: 'Cisco NetAcad — ITNv7',
     res_netacad_desc: 'De officiële Introduction to Networks v7.0 cursus op Cisco Networking Academy.',
-    res_cisco_title: 'Cisco IOS Command Reference',
-    res_cisco_desc: 'Officiële Cisco-documentatie voor IOS-commando\'s — gebruik voor syntax-verificatie.',
     res_pt_title: 'Cisco Packet Tracer',
     res_pt_desc: 'Gratis netwerk-simulatiesoftware van Cisco NetAcad voor het bouwen en testen van topologieën.',
     disc_title: 'Disclaimer · Niet verbonden met Cisco',
@@ -393,12 +381,12 @@ function applyLanguage() {
     const key = el.getAttribute('data-i18n');
     const val = t(key);
     if (el.tagName === 'INPUT') el.placeholder = val;
-    else if (key === 'disc_body' || key === 'priv_body') el.innerHTML = val; // allow strong tags + entities
+    else if (key === 'disc_body' || key === 'priv_body') el.innerHTML = val;
     else el.textContent = val;
   });
   document.getElementById('lang-nl').classList.toggle('active', currentLang === 'nl');
   document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
-  renderStats(); // re-render with new labels
+  renderStats();
 }
 
 function setLanguage(lang) {
@@ -444,7 +432,6 @@ function renderStats() {
   const body = document.getElementById('stats-body');
   const hasAny = s.lastActivity ||
     s.quizzesCompleted || s.cliScenariosCompleted ||
-    s.addrTablesCompleted || s.ptsaCompleted ||
     (s.wrongsSaved && s.wrongsSaved > 0);
 
   if (!hasAny) {
@@ -472,7 +459,6 @@ function renderStats() {
   }
   html += '</div>';
 
-  // Secondary row: last activity + mode + clear button
   const lastActText = s.lastActivity
     ? `${t('stats_last_activity')}: ${timeAgo(s.lastActivity)}`
     : '';
