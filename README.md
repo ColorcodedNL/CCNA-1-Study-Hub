@@ -2,6 +2,8 @@
 
 Independent study tools for the Cisco NetAcad Introduction to Networks v7.0 (ITNv7 / CCNA 1) curriculum. Everything runs in the browser, no server, no build step, no dependencies.
 
+![CCNA 1 Study Hub landing page](HUB.PNG)
+
 ## What's inside
 
 | File | Tool | What it does |
