@@ -1,15 +1,14 @@
 # CCNA 1 Study Hub
 
-Independent study tools for the Cisco NetAcad **Introduction to Networks v7.0** (ITNv7 / CCNA 1) curriculum. Everything runs in the browser — no server, no build step, no dependencies.
+Independent study tools for the Cisco NetAcad Introduction to Networks v7.0 (ITNv7 / CCNA 1) curriculum. Everything runs in the browser, no server, no build step, no dependencies.
 
 ## What's inside
 
 | File | Tool | What it does |
 |------|------|--------------|
 | `index.html` | Hub | Landing page with tool overview, progress stats, and resources |
-| `quiz.html`  | Final Exam Quiz | 143-question pool, randomized 60 per round, study/exam/retry modes, 1:15:00 timer |
+| `quiz.html` | Final Exam Quiz | 143-question pool, randomized 60 per round, study/exam/retry modes, 1:15:00 timer |
 | `trainer.html` | Packet Tracer Trainer | IOS CLI scenarios, VLSM addressing tables, and a full PTSA exam simulator |
-| `CCNA1_Studiegids.md` | Study guide | Condensed notes for all 17 modules with exam pitfalls |
 
 The three HTML files share a consistent NetAcad-green design and a common `localStorage` key (`ccna1_hub_stats`) so the hub can show your progress across tools.
 
@@ -17,8 +16,7 @@ The three HTML files share a consistent NetAcad-green design and a common `local
 
 **Locally:** open `index.html` in any modern browser.
 
-**GitHub Pages:** push the repo, enable Pages on the `main` branch at `/ (root)`, and the hub is live at
-`https://<username>.github.io/<repo>/`
+**GitHub Pages:** push the repo, enable Pages on the `main` branch at `/ (root)`, and the hub is live at `https://<username>.github.io/<repo>/`.
 
 ## Features
 
@@ -35,19 +33,30 @@ The three HTML files share a consistent NetAcad-green design and a common `local
 
 ### Trainer (`trainer.html`)
 
-- **CLI tab** — scenario-based IOS command practice with a working terminal emulator (prompts, tab-complete, context-sensitive help)
-- **Adrestabel tab** — fill-in VLSM addressing tables with inline validation
-- **Examen tab** — full PTSA simulation with randomized IP variants, three phases (address table → router config → switch config)
+- **CLI tab** — scenario-based IOS command practice with a working terminal emulator. Real IOS-style tab completion (only completes keywords, never parameter values), prefix matching across multiple tokens, and a `^` marker on syntax errors that mirrors the real router's output.
+- **Adrestabel tab** — fill-in VLSM addressing tables with inline validation.
+- **Examen tab** — full PTSA simulation with randomized variants across three phases:
+  1. Address table (IPv4 + IPv6 + link-local)
+  2. Router CLI configuration with credentials, SSH, and dual-stack interfaces
+  3. Switch CLI configuration with management VLAN
+
+  Each phase shows the relevant credentials and a compact address mini-table in the sidebar so you don't have to switch tabs while typing CLI commands.
 
 ### Hub (`index.html`)
 
 - Summary of your last quiz score, quizzes completed, CLI scenarios done, and pending wrongs
-- Links to both tools and external resources (NetAcad, Cisco IOS docs, Packet Tracer)
-- Option to clear local data
+- Links to both tools and external resources (NetAcad, Packet Tracer)
+- Option to clear all local data
+
+## Design notes
+
+- **System fonts only.** No Google Fonts, no external CSS, no CDN dependencies. Pages render the same offline as online.
+- **Single-file deliverables.** Each HTML file is self-contained: HTML + CSS + JS + base64-encoded Cisco device icons. No build step or bundler.
+- **Compact icon storage.** Icons are stored once and referenced via placeholders that are expanded at render time, keeping `trainer.html` around 230 KB instead of bloating it with duplicated base64 strings.
 
 ## Privacy
 
-No cookies, no analytics, no tracking, no third-party requests. The entire hub runs client-side with system fonts only — nothing is loaded from external CDNs or font services. Progress data and language preference are stored exclusively in the browser's `localStorage` under three keys:
+No cookies, no analytics, no tracking, no third-party requests. The entire hub runs client-side with system fonts only, nothing is loaded from external CDNs or font services. Progress data and language preference are stored exclusively in the browser's `localStorage` under three keys:
 
 - `ccna1_hub_stats` — session stats (scores, counters, timestamps)
 - `ccna1_wrongs` — questions you got wrong, for the retry mode
@@ -57,9 +66,9 @@ No data leaves the device. The "Reset all local data" link on the hub clears eve
 
 ## Disclaimer
 
-This is an independent study project created by a student for personal practice. **Cisco**, **Networking Academy**, **NetAcad**, **CCNA**, **Packet Tracer**, and **IOS** are trademarks of Cisco Systems, Inc. All course materials and trademarks remain the property of their respective owners. Question content is based on publicly available exam material and used for educational purposes only.
+This is an independent study project created by a student for personal practice. Cisco, Networking Academy, NetAcad, CCNA, Packet Tracer, and IOS are trademarks of Cisco Systems, Inc. All course materials and trademarks remain the property of their respective owners. Question content is based on publicly available exam material and used for educational purposes only.
 
-For the official curriculum, certification, and up-to-date material: [netacad.com](https://www.netacad.com).
+For the official curriculum, certification, and up-to-date material: [netacad.com](https://netacad.com).
 
 ## License
 
